@@ -1,2 +1,3 @@
-include ':app'
+include ':service'
 rootProject.name = "IPCServer"
+include ':client'
