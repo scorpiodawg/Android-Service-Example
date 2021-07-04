@@ -1,4 +1,4 @@
-package space.ravisu.example.lookupservice
+package space.ravisu.example.common
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

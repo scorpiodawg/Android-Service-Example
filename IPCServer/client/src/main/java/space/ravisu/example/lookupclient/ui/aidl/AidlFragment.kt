@@ -11,16 +11,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import space.ravisu.example.lookupclient.ILookupClient
-import android.os.Process
 import space.ravisu.example.lookupclient.R
 import space.ravisu.example.lookupclient.databinding.FragmentAidlBinding
+import space.ravisu.example.lookupservice.*
 
 class AidlFragment : Fragment(), ServiceConnection, View.OnClickListener {
 
     private var _binding: FragmentAidlBinding? = null
     private val binding get() = _binding!!
-    var iRemoteService: ILookupClient? = null
+    private var remoteService: ILookupService? = null
     private var connected = false
 
     override fun onCreateView(
@@ -60,7 +59,7 @@ class AidlFragment : Fragment(), ServiceConnection, View.OnClickListener {
     }
     private fun connectToRemoteService() {
         val intent = Intent("aidlexample")
-        val pack = ILookupClient::class.java.`package`
+        val pack = ILookupService::class.java.`package`
         pack?.let {
             intent.setPackage(pack.name)
             activity?.applicationContext?.bindService(
@@ -78,19 +77,16 @@ class AidlFragment : Fragment(), ServiceConnection, View.OnClickListener {
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
         // Gets an instance of the AIDL interface named IIPCExample,
         // which we can use to call on the service
-        iRemoteService = ILookupClient.Stub.asInterface(service)
-        binding.txtServerPid.text = iRemoteService?.pid.toString()
-        binding.txtServerConnectionCount.text = iRemoteService?.connectionCount.toString()
-        iRemoteService?.setDisplayedValue(
-            context?.packageName,
-            Process.myPid(),
-            binding.edtClientData.text.toString())
+        remoteService = ILookupService.Stub.asInterface(service)
+        binding.txtServerPid.text = remoteService?.pid.toString()
+        binding.txtServerConnectionCount.text = remoteService?.connectionCount.toString()
+        binding.txtResults.text = remoteService?.lookup("test")?.result?.joinToString()
         connected = true
     }
 
     override fun onServiceDisconnected(name: ComponentName?) {
         Toast.makeText(context, "IPC server has disconnected unexpectedly", Toast.LENGTH_LONG).show()
-        iRemoteService = null
+        remoteService = null
         connected = false
     }
 }

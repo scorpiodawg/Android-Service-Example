@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">IPCClient</string>
     <string name="process_id_of_server">Process ID of Server</string>
-    <string name="connection_count_of_server">Connection Count of Server</string>
+    <string name="connection_count_of_server">Service connections</string>
     <string name="connect">Connect</string>
     <string name="disconnect">Disconnect</string>
-    <string name="say_something_to_server">Say Something to the Server</string>
+    <string name="start_connect">Press `Connect` to establish a session</string>
     <string name="salut">Salut!</string>
     <string name="title_aidl">AIDL</string>
     <string name="title_messenger">Messenger</string>
@@ -12,4 +12,5 @@
     <string name="connect_via_messenger">Connect via Messenger</string>
     <string name="send_broadcast">Send Broadcast</string>
     <string name="broadcast_sent">Broadcast Sent</string>
+    <string name="lookup">Look up string</string>
 </resources>

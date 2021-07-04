@@ -3,17 +3,21 @@ package space.ravisu.example.lookupservice
 import android.app.Service
 import android.content.Intent
 import android.os.*
+import space.ravisu.example.common.QueryResult
+import java.util.*
 
 
 class RemoteLookupService : Service() {
 
     companion object {
         // How many connection requests have been received since the service started
-        var connectionCount: Int = 0
+        private var connectionCount: Int = 0
 
         // Client might have sent an empty data
         const val NOT_SENT = "Not sent!"
     }
+
+    private val random = Random()
 
     // Messenger IPC - Messenger object contains binder to send to client
     private val mMessenger = Messenger(IncomingHandler())
@@ -48,14 +52,18 @@ class RemoteLookupService : Service() {
 
         override fun getPid(): Int = Process.myPid()
 
-        override fun getConnectionCount(): Int = connectionCount
+        override fun getConnectionCount(): Int = RemoteLookupService.Companion.connectionCount
 
         /**
          * Likely a slow, blocking call. Client should hide the invocation
          * in a background thread to allow for asynchronicity.
          */
         override fun lookup(key: String?): QueryResult {
-            return QueryResult(arrayOf("foo", "bar"))
+            val count = random.nextInt(5) + 1
+            // https://stackoverflow.com/a/57077555
+            val alphabet: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+            fun randomString() : String = List(5) { alphabet.random() }.joinToString("")
+            return QueryResult((0..count).map { randomString() }.toTypedArray())
         }
     }
 
